@@ -139,6 +139,7 @@ class CCA:
 
     @staticmethod
     def cca_eig(X, Y, Cxx=None, eps=1e-6):
+
         if Cxx is None:
             Cxx = np.dot(X, X.transpose())  # auto correlation matrix
         Cyy = np.dot(Y, Y.transpose())
