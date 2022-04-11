@@ -114,6 +114,7 @@ class PeripheralManager:
         Rwb = output_gain*10/256 + 0.06
         Rwa = (256-output_gain)*10/256 + 0.06
         return (8.2+Rwb)/(1+Rwa) + 1
+        
     @property
     def adc_running(self):
         return (

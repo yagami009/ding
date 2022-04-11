@@ -39,6 +39,11 @@ class Collector:
         self._init_peripherals(spi_params, adc_params)
         gc.collect()
 
+        print("Collector initialised with preprocessing ({0}), downsampling ({1})".format(
+            self.preprocessing_enabled, self.downsample
+            )
+        )
+        
         self.is_setup = True
 
     def run(self):
