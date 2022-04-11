@@ -43,7 +43,7 @@ class Collector:
             self.preprocessing_enabled, self.downsample
             )
         )
-        
+
         self.is_setup = True
 
     def run(self):
@@ -51,9 +51,6 @@ class Collector:
             raise ValueError("Collector not setup. Call `.setup()` before running.")
 
         self.start_sample_timer()
-
-        if self.logger is not None:
-            self.start_logger()
 
     def stop(self):
         if self.is_sampling:
@@ -91,7 +88,7 @@ class Collector:
         # this will only be true every 1s once buffer fills
         if self.sample_counter >= self.buffer_size:
             self.periph_manager.write_led("red", 1)
-            data = self._read_internal_buffer(preprocess=self.preprocessing_enabled, downsample=self.ds)
+            data = self._read_internal_buffer(preprocess=self.preprocessing_enabled, downsample=self.downsample)
             update_buffer(
                 self.output_buffer, list(data), self.buffer_size, inplace=True
             )
