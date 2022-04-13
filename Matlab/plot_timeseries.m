@@ -1,7 +1,7 @@
 close all
 clear all
 
-f = fopen('/Users/rishil/Desktop/FYP/EEG-decoding/eeg_lib/log/10hz1.txt');
+f = fopen('C:\Users\RISHI\Desktop\FYP\EEG-decoding\eeg_lib\log\saved_array.txt');
 data = textscan(f,'%s');
 fclose(f);
 data = str2double(data{1}(2:end-1))';
