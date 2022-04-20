@@ -22,7 +22,7 @@ DEFAULT_SPI_PARAMS = {
     "sck": 18,
     "mosi": 23,
     "miso": 19,
-    "output_amp_gain": 50,  # value between 0-255 controlling gain of output amplifier
+    "output_amp_gain": 100,  # value between 0-255 controlling gain of output amplifier
 }
 
 get_param = lambda key: Pin(DEFAULT_SPI_PARAMS[key])

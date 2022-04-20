@@ -100,7 +100,10 @@ class PeripheralManager:
             print("SPI initialised")
 
         output_gain = max(min(self._spi_params["output_amp_gain"], 255), 0)
-        self.spi_write(output_gain)
+        cs = machine.Pin(5, machine.Pin.OUT)
+        cs.on() #active low
+        self._spi.write(output_gain)
+        cs.off() #active high
         if self.verbose:
             print(
                 "DigiPot set to {0} = gain of {1}".format(

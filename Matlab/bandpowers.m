@@ -1,14 +1,15 @@
 close all
 clear all
 
-f = fopen('C:\Users\RISHI\Desktop\FYP\EEG-decoding\eeg_lib\log\10hz1.txt');
+f = fopen("C:\Users\RISHI\Desktop\FYP\EEG-decoding\eeg_lib\log\fs512hz_gain255_30s\open_close\15sopen_15sclose2.txt");
 data = textscan(f,'%s');
 fclose(f);
 data = str2double(data{1}(2:end-1))';
 
-fs = 256;
-data = data(1,512:end);
+fs = 512;
 
+%data = data(:,1:length(data)/2);
+data = data(:,length(data)/2:end);
 % alpha (8?12 Hz)
 % delta (1?4 Hz)
 % theta (4?8 Hz)
