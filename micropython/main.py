@@ -22,7 +22,7 @@ DEFAULT_SPI_PARAMS = {
     "sck": 18,
     "mosi": 23,
     "miso": 19,
-    "output_amp_gain": 200,  # value between 0-255 controlling gain of output amplifier
+    "output_amp_gain": 255,  # value between 0-255 controlling gain of output amplifier
 }
 
 get_param = lambda key: Pin(DEFAULT_SPI_PARAMS[key])
@@ -78,10 +78,8 @@ sample_timer.init(freq=pot_size, callback=sample_callback)
 for i in range(30):
     # set send time
     time.sleep(1)
-    print(gc.mem_free())
     data = adc_sample
     toSend = {"raw_data":data}
-    print(toSend)
     requests.JSONRequest("http://192.168.0.37:5001/collect", toSend)
 
 requests.GETRequest("http://192.168.0.37:5001/save")

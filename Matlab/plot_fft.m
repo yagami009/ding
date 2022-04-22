@@ -1,4 +1,4 @@
-f = fopen("C:\Users\RISHI\Desktop\FYP\EEG-decoding\eeg_lib\log\saved_array.txt");
+f = fopen("C:\Users\RISHI\Desktop\FYP\EEG-decoding\eeg_lib\log\fs512hz_gain255_30s\10hz\10hz_LED2.txt");
 data = textscan(f,'%s');
 fclose(f);
 data = str2double(data{1}(2:end-1))';
@@ -30,4 +30,4 @@ plot(f,P1)
 title('Single-Sided Amplitude Spectrum of Data')
 xlabel('f (Hz)')
 ylabel('|P1(f)|')
-ylim([0 12])
+ylim([0 50])

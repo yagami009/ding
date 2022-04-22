@@ -49,4 +49,4 @@ for i=1:N
    end
 end
 
-[A1,B1] = canoncorr(data',y1');
+[A1,B1] = canoncorr(stacked_data',y1');

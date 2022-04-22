@@ -1,7 +1,7 @@
 
 fs = 512;
 t = 0:1/fs:1-1/fs;
-f = fopen("C:\Users\RISHI\Desktop\FYP\EEG-decoding\eeg_lib\log\fs512hz_gain255_30s\open\open_eyes2.txt");
+f = fopen("C:\Users\RISHI\Desktop\FYP\EEG-decoding\eeg_lib\log\saved_array.txt");
 data = textscan(f,'%s');
 fclose(f);
 x_open = removeDC(str2double(data{1}(2:end-1)))';
