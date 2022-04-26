@@ -61,11 +61,11 @@ connect_wifi(ssid, password)
 adc_sample = []
 
 # set for frequency the adc should be read and set the size of the array to send every t seconds 
-pot_size = 512
+pot_size = 256
 
 def sample_callback(*args, **kwargs):
     global adc_sample
-    if len(adc_sample) > pot_size:
+    if len(adc_sample) >= pot_size:
         # fifo
         del adc_sample[0]
         adc_sample.append(adc.read())
@@ -75,11 +75,48 @@ def sample_callback(*args, **kwargs):
 sample_timer = Timer(0)
 sample_timer.init(freq=pot_size, callback=sample_callback)
 
-for i in range(30):
-    # set send time
+requests.JSONRequest("http://192.168.0.37:5001/message", {"message": "### LOOK AT 7 HZ ###"})
+time.sleep(10)
+    
+#send 7hz data
+for i in range(4):
     time.sleep(1)
+    print(gc.mem_free())
+    data = adc_sample
+    toSend = {"7":data}
+    print(toSend)
+    requests.JSONRequest("http://192.168.0.37:5001/7hz", toSend)
+    
+requests.JSONRequest("http://192.168.0.37:5001/message", {"message": "### LOOK AT 10 HZ ###"})
+time.sleep(10)
+
+#send 10hz data
+for i in range(4):
+    time.sleep(1)
+    print(gc.mem_free())
+    data = adc_sample
+    toSend = {"10":data}
+    print(toSend)
+    requests.JSONRequest("http://192.168.0.37:5001/10hz", toSend)
+
+requests.JSONRequest("http://192.168.0.37:5001/message", {"message": "### LOOK AT 12 HZ ###"})
+time.sleep(5)
+
+#send 12hz data
+for i in range(4):
+    time.sleep(1)
+    print(gc.mem_free())
+    data = adc_sample
+    toSend = {"12":data}
+    print(toSend)
+    requests.JSONRequest("http://192.168.0.37:5001/12hz", toSend)
+
+requests.GETRequest("http://192.168.0.37:5001/isCalibrated")
+
+while True:
+    time.sleep(1)
+    print(gc.mem_free())
     data = adc_sample
     toSend = {"raw_data":data}
-    requests.JSONRequest("http://192.168.0.37:5001/collect", toSend)
-
-requests.GETRequest("http://192.168.0.37:5001/save")
+    print(toSend)
+    requests.JSONRequest("http://192.168.0.37:5001/decode", toSend)

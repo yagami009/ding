@@ -30,6 +30,13 @@ paths = [sevenhz_process, tenhz_process, twelvehz_process];
 
 result_arr = [];
 decoded = [];
+res_distr = [];
+
+fs = 512; % Sampling frequency (samples per second) 
+dt = 1/fs; % seconds per sample 
+step = 512;
+StopTime = step/fs; % seconds 
+t = (0:dt:StopTime)'; % seconds 
 
 for p = 1:length(paths)
     
@@ -39,39 +46,41 @@ for p = 1:length(paths)
     data = removeDC(str2double(data{1}(2:end-1))');
     data = bandpass(data,[1 37],512);
     
-    X = (data) / (max(data));
+    X = normalize(data);
     
-    
-    fs = 512; % Sampling frequency (samples per second) 
-    dt = 1/fs; % seconds per sample 
-    StopTime = 1; % seconds 
-    t = (0:dt:StopTime)'; % seconds 
-    
+    last = step;
     results = [];
-    last = 512;
-    step = 512;
     
     while last < length(X)
         % #########################################################################
         F = 7; % Sine wave frequency (hertz) 
         data = sin(2*pi*F*t);
+        data1 = cos(2*pi*F*t);
         Y = data(1:end-1,:)';
-        [r7, Wx7, Wy7] = cca_calc(X(:,last-step+1:last),Y);
+        Y1 = data1(1:end-1,:)';
+
+        [r7, Wx7, Wy7] = cca_calc([X(:,last-step+1:last);X(:,last-step+1:last)],[Y; Y1]);
         % #########################################################################
         F = 10; % Sine wave frequency (hertz) 
         data = sin(2*pi*F*t);
+        data1 = cos(2*pi*F*t);
         Y = data(1:end-1,:)';
-        [r10, Wx10, Wy10] = cca_calc(X(:,last-step+1:last),Y);
+        Y1 = data1(1:end-1,:)';
+
+        [r10, Wx10, Wy10] = cca_calc([X(:,last-step+1:last);X(:,last-step+1:last)],[Y; Y1]);
         % #########################################################################
         F = 12; % Sine wave frequency (hertz) 
         data = sin(2*pi*F*t);
+        data1 = cos(2*pi*F*t);
         Y = data(1:end-1,:)';
-        [r12, Wx12, Wy12] = cca_calc(X(:,last-step+1:last),Y);
+        Y1 = data1(1:end-1,:)';
+
+        [r12, Wx12, Wy12] = cca_calc([X(:,last-step+1:last);X(:,last-step+1:last)],[Y; Y1]);
         % #########################################################################
         
-        if r12 > r10 && r12 > r7
+        if mean(r12) > mean(r10) && mean(r12) > mean(r7)
             results(end+1) = 12;
-        elseif r10 > r7
+        elseif mean(r10) > mean(r7)
             results(end+1) = 10;
         else
             results(end+1) = 7;
@@ -80,6 +89,7 @@ for p = 1:length(paths)
         last = last+step;
     end
     
+    res_distr = [res_distr; results];
     res = [sum(results(:) == 12) sum(results(:) == 10) sum(results(:) == 7)];
     result_arr = [result_arr; res];
     [M,I] = max(res);
@@ -93,4 +103,4 @@ for p = 1:length(paths)
     end
 end
 
-T = table(paths', decoded', result_arr);
+T = table(paths', decoded', result_arr, res_distr);
