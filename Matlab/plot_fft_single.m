@@ -1,4 +1,4 @@
-f = fopen("C:\Users\RISHI\Desktop\FYP\EEG-decoding\eeg_lib\log\fs512hz_gain255_30s\10hz\10hz_LED2.txt");
+f = fopen("C:\Users\RISHI\Desktop\FYP\EEG-decoding\eeg_lib\log\Proper_Gain_255\10hz_2.txt");
 data = textscan(f,'%s');
 fclose(f);
 data = str2double(data{1}(2:end-1))';
