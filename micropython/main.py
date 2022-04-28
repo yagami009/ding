@@ -13,7 +13,6 @@ freq(240000000)
 adc = ADC(Pin(33))
 adc.atten(machine.ADC.ATTN_11DB)
 adc.width(machine.ADC.WIDTH_12BIT)
-adcread = adc.read()
 
 ##################################################################################
 
@@ -40,9 +39,7 @@ spi = SPI(
 
 # setting gain #
 
-# data = bytearray([17, DEFAULT_SPI_PARAMS['output_amp_gain']])
 data = bytearray([17,DEFAULT_SPI_PARAMS['output_amp_gain']])
-# data = bytearray(100)
 cs = machine.Pin(5, machine.Pin.OUT)
 
 # have to turn GPIO 5 off before writing the gain
@@ -62,6 +59,7 @@ adc_sample = []
 
 # set for frequency the adc should be read and set the size of the array to send every t seconds 
 pot_size = 256
+sampling_rate = 64
 
 def sample_callback(*args, **kwargs):
     global adc_sample
@@ -73,15 +71,43 @@ def sample_callback(*args, **kwargs):
         adc_sample.append(adc.read())
 
 sample_timer = Timer(0)
-sample_timer.init(freq=pot_size, callback=sample_callback)
+sample_timer.init(freq=sampling_rate, callback=sample_callback)
 
-for i in range(30):
-    # set send time
-    time.sleep(1)
-    print(gc.mem_free())
+requests.JSONRequest("http://192.168.0.37:5001/message", {"message": "### LOOK AT 7 HZ ###"})
+time.sleep(10)
+
+decode_period = 4
+#send 7hz data
+for i in range(4):
+    time.sleep(decode_period)
+    data = adc_sample
+    toSend = {"7":data}
+    requests.JSONRequest("http://192.168.0.37:5001/7hz", toSend)
+    
+requests.JSONRequest("http://192.168.0.37:5001/message", {"message": "### LOOK AT 10 HZ ###"})
+time.sleep(10)
+
+#send 10hz data
+for i in range(4):
+    time.sleep(decode_period)
+    data = adc_sample
+    toSend = {"10":data}
+    requests.JSONRequest("http://192.168.0.37:5001/10hz", toSend)
+
+requests.JSONRequest("http://192.168.0.37:5001/message", {"message": "### LOOK AT 12 HZ ###"})
+time.sleep(5)
+
+#send 12hz data
+for i in range(4):
+    time.sleep(decode_period)
+    data = adc_sample
+    toSend = {"12":data}
+    requests.JSONRequest("http://192.168.0.37:5001/12hz", toSend)
+
+requests.GETRequest("http://192.168.0.37:5001/isCalibrated")
+
+while True:
+    time.sleep(decode_period)
     data = adc_sample
     toSend = {"raw_data":data}
-    print(toSend)
-    requests.JSONRequest("http://192.168.0.37:5001/collect", toSend)
-
-requests.GETRequest("http://192.168.0.37:5001/save")
+    requests.JSONRequest("http://192.168.0.37:5001/decode", toSend)

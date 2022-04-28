@@ -33,6 +33,9 @@ def read_json(filename):
     with open(filename) as f:
         return json.load(f)
 
+def flatten(t):
+    return [item for sublist in t for item in sublist]
+
 @app.route('/7hz', methods=["POST"])
 def cal7():
     data = request.get_json(force=True)
@@ -60,6 +63,18 @@ def message():
 @app.route('/isCalibrated', methods=["GET"])
 def calibrate():
 
+    sourceFile = open(DEFAULT_FILENAME+'7hz_calibration.txt', 'w')
+    print(flatten(train7) , file = sourceFile)
+    sourceFile.close()
+  
+    sourceFile = open(DEFAULT_FILENAME+'10hz_calibration.txt', 'w')
+    print(flatten(train10) , file = sourceFile)
+    sourceFile.close()
+
+    sourceFile = open(DEFAULT_FILENAME+'12hz_calibration.txt', 'w')
+    print(flatten(train12) , file = sourceFile)
+    sourceFile.close()
+
     train7_reshape = np.array(train7).reshape(number_train,fs)
     train7_cal = train7_reshape.T.reshape(1,fs,number_train)
 
@@ -78,9 +93,18 @@ def calibrate():
     # print(mset_cca.classify(data_tensor[0,:,:,0]))
     return "calibrated", 200
 
+decoding_data = []
+
 @app.route('/decode', methods=["POST"])
 def decoding():
     decode_data = request.get_json(force=True)
+
+    decoding_data.append(decode_data['raw_data'])
+
+    sourceFile = open(DEFAULT_FILENAME+'decoding_data.txt', 'w')
+    print(flatten(decoding_data) , file = sourceFile)
+    sourceFile.close()
+
     decode_data = np.array(decode_data['raw_data']).reshape(1,Ns)
 
     mset_res = mset_cca.classify(decode_data)
