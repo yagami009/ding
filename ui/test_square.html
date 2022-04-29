@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+
+<!-- <div class="flex p-20 flex-col bg-gray-900 justify-between h-screen">
+    <div id='f1' class="flex p-20 flex-col bg-red-600 justify-between h-screen"></div>
+</div> -->
+
+<div class="bg-gray-900">
+    <div id='f1' class="flex p-20 flex-col bg-red-600 justify-between h-screen"></div>
+</div>
+
+
+
+<script>
+  window.addEventListener("load", function() {
+
+    // utility func to extract query params from url
+    function getUrlParamByName(name, url = window.location.href) {
+      name = name.replace(/[\[\]]/g, '\\$&');
+      var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+          results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+
+    // flicker component with id `id` at frequency `freq`
+    let flicker = (id, freq) => {
+      var f = document.getElementById(id);
+      setInterval(function() {
+        if (f.classList.contains('opacity-0')){
+          f.classList.remove('opacity-0');
+        }else{
+          f.classList.add('opacity-0');
+        }
+      }, 1000/(2*freq));
+    }
+
+    flicker('f1', getUrlParamByName('f1')||getUrlParamByName('freq')||1)
+
+}, false);
+  </script>
+
+</html>

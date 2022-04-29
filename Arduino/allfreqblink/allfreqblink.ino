@@ -8,15 +8,15 @@ void setup() {
 //  led7.blink(71, 71); 
 //  led8.blink(50, 50); 
 //  led9.blink(42, 42); 
-//    led7.blink(71, 71); 
-//    led8.blink(71, 71); 
-//    led9.blink(71, 71); 
+    led7.blink(71, 71); 
+    led8.blink(71, 71); 
+    led9.blink(71, 71); 
 //    led7.blink(50, 50); 
 //    led8.blink(50, 50); 
 //    led9.blink(50, 50); 
-    led7.blink(42, 42); 
-    led8.blink(42, 42); 
-    led9.blink(42, 42);
+//    led7.blink(42, 42); 
+//    led8.blink(42, 42); 
+//    led9.blink(42, 42);
 }
 
 void loop() {
