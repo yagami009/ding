@@ -8,6 +8,8 @@ from machine import freq
 from lib.utils import connect_wifi
 from lib.requests import MicroWebCli as requests
 import ujson as json
+from lib.signal import sos_filter
+from ulab import numpy as np
 
 freq(240000000)
 adc = ADC(Pin(33))
@@ -58,9 +60,16 @@ connect_wifi(ssid, password)
 adc_sample = []
 
 # set for frequency the adc should be read and set the size of the array to send every t seconds 
-pot_size = 256
-sampling_rate = 64
+pot_size = 256*4
+sampling_rate = 256
 
+def preprocess_data(signal):
+
+    ds_factor = 4
+    signal = np.array(signal) - np.mean(signal)
+    return sos_filter(signal, fs=256)[::ds_factor]
+
+    
 def sample_callback(*args, **kwargs):
     global adc_sample
     if len(adc_sample) >= pot_size:
@@ -80,34 +89,39 @@ decode_period = 4
 #send 7hz data
 for i in range(4):
     time.sleep(decode_period)
-    data = adc_sample
+    data = preprocess_data(adc_sample).tolist()
     toSend = {"7":data}
     requests.JSONRequest("http://192.168.0.37:5001/7hz", toSend)
-    
+    print(gc.mem_free())
+
+gc.collect()
 requests.JSONRequest("http://192.168.0.37:5001/message", {"message": "### LOOK AT 10 HZ ###"})
 time.sleep(10)
 
 #send 10hz data
 for i in range(4):
     time.sleep(decode_period)
-    data = adc_sample
+    data = preprocess_data(adc_sample).tolist()
     toSend = {"10":data}
     requests.JSONRequest("http://192.168.0.37:5001/10hz", toSend)
-
+    print(gc.mem_free())
+    
+gc.collect()
 requests.JSONRequest("http://192.168.0.37:5001/message", {"message": "### LOOK AT 12 HZ ###"})
 time.sleep(5)
 
 #send 12hz data
 for i in range(4):
     time.sleep(decode_period)
-    data = adc_sample
+    data = preprocess_data(adc_sample).tolist()
     toSend = {"12":data}
     requests.JSONRequest("http://192.168.0.37:5001/12hz", toSend)
 
+gc.collect()
 requests.GETRequest("http://192.168.0.37:5001/isCalibrated")
 
 while True:
     time.sleep(decode_period)
-    data = adc_sample
+    data = preprocess_data(adc_sample).tolist()
     toSend = {"raw_data":data}
     requests.JSONRequest("http://192.168.0.37:5001/decode", toSend)

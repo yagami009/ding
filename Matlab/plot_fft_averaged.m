@@ -1,11 +1,10 @@
 clear all
 close all
 
-f = fopen('C:\Users\RISHI\Desktop\FYP\EEG-decoding\eeg_lib\log\gain200\connected_close_eyes.txt');
+f = fopen("C:\Users\RISHI\Desktop\FYP\EEG-decoding\eeg_lib\log\air_tests\fs256_ns256.txt");
 data = textscan(f,'%s');
 fclose(f);
-data = str2double(data{1}(2:end-1))';
-data = data(:,512:end);
+data = removeDC(str2double(data{1}(2:end-1))');
 
 fs=256;
 average_samples = 4;
@@ -15,7 +14,7 @@ m  = s1 - mod(s1, average_samples);
 y  = reshape(data(1:m), average_samples, []); 
 averaged_samples = sum(y, 1) / average_samples;
 
-Fs = 256;            % Sampling frequency                    
+Fs = 64;            % Sampling frequency                    
 T = 1/Fs;             % Sampling period       
 L = length(data);     % Length of signal
 t = (0:L-1)*T;        % Time vector
