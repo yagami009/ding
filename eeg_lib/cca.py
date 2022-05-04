@@ -452,7 +452,7 @@ def fbcca_realtime(data, list_freqs, fs, num_harms=3, num_fbs=5):
     _, num_smpls = data.shape
 
     y_ref = cca_reference(list_freqs, fs, num_smpls, num_harms)
-    cca = CCA(n_components=1)  # initialize CCA
+    cca = CCA(list_freqs,fs,Nh=1)  # initialize CCA
 
     # result matrix
     r = np.zeros((num_fbs, num_targs))
