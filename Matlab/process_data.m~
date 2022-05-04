@@ -1,0 +1,8 @@
+load sample
+
+% [# of targets, # of channels, # of sampling points, # of blocks] = size(eeg);
+% increments of 0.2hz starting at 8 hz
+% target index 1 -> 8hz, 11 -> 10hz, 21 -> 12hz
+
+for i = 1:
+eight = eeg(1,1,:,1);
