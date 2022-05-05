@@ -13,8 +13,8 @@ load sample
 
 for c = 1:9
     for b = 1:6
-        str = sprintf("/Users/rishil/Desktop/FYP/EEG-decoding/eeg_lib/log/mnakanishi/12hz/12hz_channel_%02d_%02d",c,b);
-        data = squeeze(eeg(21,c,:,b))';
+        str = sprintf("/Users/rishil/Desktop/FYP/EEG-decoding/eeg_lib/log/mnakanishi/11hz/11hz_channel_%02d_%02d",c,b);
+        data = squeeze(eeg(16,c,:,b))';
         csvwrite(str,data)
     end
 end
