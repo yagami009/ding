@@ -1,4 +1,4 @@
-f = fopen("C:\Users\RISHI\Desktop\FYP\EEG-decoding\eeg_lib\log\decreased_noise_location\12_2.txt");
+f = fopen("C:\Users\RISHI\Desktop\FYP\EEG-decoding\eeg_lib\log\Proper_Gain_255\7hz_2.txt");
 data = textscan(f,'%s');
 fclose(f);
 data = removeDC(str2double(data{1}(2:end-1))');
@@ -13,7 +13,7 @@ y = bandpass(data,[4 28],256);
 figure;
 plot(1:length(y), y);
 title('Time Series filtered - Bandpass 1-32hz')
-ylim([-400 200])
+ylim([-150 100])
 
 Fs = 256;            % Sampling frequency                    
 T = 1/Fs;             % Sampling period       

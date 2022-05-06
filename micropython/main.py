@@ -8,13 +8,12 @@ from machine import freq
 from lib.utils import connect_wifi
 from lib.requests import MicroWebCli as requests
 import ujson as json
-from lib.signal import sos_filter
-from ulab import numpy as np
 
 freq(240000000)
 adc = ADC(Pin(33))
 adc.atten(machine.ADC.ATTN_11DB)
 adc.width(machine.ADC.WIDTH_12BIT)
+adcread = adc.read()
 
 ##################################################################################
 
@@ -41,7 +40,9 @@ spi = SPI(
 
 # setting gain #
 
+# data = bytearray([17, DEFAULT_SPI_PARAMS['output_amp_gain']])
 data = bytearray([17,DEFAULT_SPI_PARAMS['output_amp_gain']])
+# data = bytearray(100)
 cs = machine.Pin(5, machine.Pin.OUT)
 
 # have to turn GPIO 5 off before writing the gain
@@ -60,16 +61,9 @@ connect_wifi(ssid, password)
 adc_sample = []
 
 # set for frequency the adc should be read and set the size of the array to send every t seconds 
-pot_size = 256*4
-sampling_rate = 256
+pot_size = 256
+fs = 256
 
-def preprocess_data(signal):
-
-    ds_factor = 4
-    signal = np.array(signal) - np.mean(signal)
-    return sos_filter(signal, fs=256)[::ds_factor]
-
-    
 def sample_callback(*args, **kwargs):
     global adc_sample
     if len(adc_sample) >= pot_size:
@@ -80,48 +74,15 @@ def sample_callback(*args, **kwargs):
         adc_sample.append(adc.read())
 
 sample_timer = Timer(0)
-sample_timer.init(freq=sampling_rate, callback=sample_callback)
+sample_timer.init(freq=fs, callback=sample_callback)
 
-requests.JSONRequest("http://192.168.0.37:5001/message", {"message": "### LOOK AT 7 HZ ###"})
-time.sleep(10)
-
-decode_period = 4
-#send 7hz data
-for i in range(4):
-    time.sleep(decode_period)
-    data = preprocess_data(adc_sample).tolist()
-    toSend = {"7":data}
-    requests.JSONRequest("http://192.168.0.37:5001/7hz", toSend)
+for i in range(30):
+    # set send time
+    time.sleep(1)
     print(gc.mem_free())
-
-gc.collect()
-requests.JSONRequest("http://192.168.0.37:5001/message", {"message": "### LOOK AT 10 HZ ###"})
-time.sleep(10)
-
-#send 10hz data
-for i in range(4):
-    time.sleep(decode_period)
-    data = preprocess_data(adc_sample).tolist()
-    toSend = {"10":data}
-    requests.JSONRequest("http://192.168.0.37:5001/10hz", toSend)
-    print(gc.mem_free())
-    
-gc.collect()
-requests.JSONRequest("http://192.168.0.37:5001/message", {"message": "### LOOK AT 12 HZ ###"})
-time.sleep(5)
-
-#send 12hz data
-for i in range(4):
-    time.sleep(decode_period)
-    data = preprocess_data(adc_sample).tolist()
-    toSend = {"12":data}
-    requests.JSONRequest("http://192.168.0.37:5001/12hz", toSend)
-
-gc.collect()
-requests.GETRequest("http://192.168.0.37:5001/isCalibrated")
-
-while True:
-    time.sleep(decode_period)
-    data = preprocess_data(adc_sample).tolist()
+    data = adc_sample
     toSend = {"raw_data":data}
-    requests.JSONRequest("http://192.168.0.37:5001/decode", toSend)
+    print(toSend)
+    requests.JSONRequest("http://192.168.0.37:5001/collect", toSend)
+
+requests.GETRequest("http://192.168.0.37:5001/save")
