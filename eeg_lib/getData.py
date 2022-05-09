@@ -76,19 +76,55 @@ test_2 = {
 def calib_7_1():
     return {7: calib_1[7]}, 200
 
+@app.route("/calib_2_7", methods=["GET"])
+def calib_7_2():
+    return {7: calib_2[7]}, 200
+
 @app.route("/calib_1_10", methods=["GET"])
 def calib_10_1():
     return {10: calib_1[10]}, 200
-    
+
+@app.route("/calib_2_10", methods=["GET"])
+def calib_10_2():
+    return {10: calib_2[10]}, 200
+
 @app.route("/calib_1_12", methods=["GET"])
 def calib_12_1():
     return {12: calib_1[12]}, 200
 
+@app.route("/calib_2_12", methods=["GET"])
+def calib_12_2():
+    return {12: calib_2[12]}, 200
+
 @app.route("/test_7_1", methods=["GET"])
-def test_7_1():
+def test_1_7():
     count = int(request.args.get('count'))
     return {'test': test_1[7][count]}, 200
 
+@app.route("/test_7_2", methods=["GET"])
+def test_1_2():
+    count = int(request.args.get('count'))
+    return {'test': test_2[7][count]}, 200
+
+@app.route("/test_10_1", methods=["GET"])
+def test_1_10():
+    count = int(request.args.get('count'))
+    return {'test': test_1[10][count]}, 200
+
+@app.route("/test_10_2", methods=["GET"])
+def test_2_10():
+    count = int(request.args.get('count'))
+    return {'test': test_2[10][count]}, 200
+
+@app.route("/test_12_1", methods=["GET"])
+def test_1_12():
+    count = int(request.args.get('count'))
+    return {'test': test_1[12][count]}, 200
+
+@app.route("/test_12_2", methods=["GET"])
+def test_2_12():
+    count = int(request.args.get('count'))
+    return {'test': test_2[12][count]}, 200
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5001)
