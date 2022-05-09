@@ -34,7 +34,7 @@ data_file_7_split = []
 data_file_10_split = []
 data_file_12_split = []
 
-train = 3
+train = 4
 count = -1
 
 for i in range(0,len(data_file_7),50):

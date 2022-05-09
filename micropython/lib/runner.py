@@ -12,6 +12,8 @@ class Runner:
     def __init__(self, decoding_algo, buffer_size=256, stimulus_freqs=None) -> None:
         if stimulus_freqs is None:
             self.stim_freqs = config.STIM_FREQS  # assign defaults
+        else:
+            self.stim_freqs = stimulus_freqs
 
         self.decoding_algo = decoding_algo
 
