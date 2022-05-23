@@ -76,7 +76,7 @@ def sample_callback(*args, **kwargs):
 sample_timer = Timer(0)
 sample_timer.init(freq=fs, callback=sample_callback)
 
-for i in range(30):
+for i in range(30): 
     # set send time
     time.sleep(1)
     print(gc.mem_free())
