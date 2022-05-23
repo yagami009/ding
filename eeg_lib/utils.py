@@ -61,7 +61,6 @@ def load_df(fname, key="data", cols=None):
 
 
 def standardise(X):
-    print(X.shape)
     axis = np.argmax(X.shape)
     return (X - np.mean(X, axis=axis)) / np.std(X, axis=axis)
     # retList = [] 
