@@ -51,8 +51,8 @@ cs.off()
 spi.write(data)
 cs.on() 
 
-ssid = ''
-password = ''
+ssid = 'TP-Link_AP_4C04'
+password = '63525465'
 connect_wifi(ssid, password)
 
 ###############################################################################
