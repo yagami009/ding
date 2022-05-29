@@ -1,4 +1,4 @@
-f = fopen("C:\Users\RISHI\Desktop\FYP\EEG-decoding\eeg_lib\log\decreased_noise_location\12_2.txt");
+f = fopen("/Users/rishil/Desktop/FYP/EEG-decoding/filtboard.txt");
 data = textscan(f,'%s');
 fclose(f);
 data = removeDC(str2double(data{1}(2:end-1))');
