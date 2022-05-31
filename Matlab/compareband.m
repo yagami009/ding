@@ -1,4 +1,4 @@
-f = fopen("C:\Users\RISHI\Desktop\FYP\EEG-decoding\eeg_lib\log\OC4.txt");
+f = fopen("/Users/rishil/Desktop/FYP/EEG-decoding/eeg_lib/log/OC1.txt");
 data = textscan(f,'%s');
 fclose(f);
 data = str2double(data{1}(2:end-1))';
