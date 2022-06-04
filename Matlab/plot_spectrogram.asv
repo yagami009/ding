@@ -1,4 +1,4 @@
-f = fopen("C:\Users\RISHI\Desktop\FYP\EEG-decoding\eeg_lib\log\OC\OC17.txt");
+f = fopen("C:\Users\RISHI\Desktop\FYP\EEG-decoding\eeg_lib\log\OC\OC6.txt");
 data = textscan(f,'%s');
 fclose(f);
 x = removeDC(str2double(data{1}(2:end-1)))';

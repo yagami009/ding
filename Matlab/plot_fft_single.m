@@ -1,4 +1,4 @@
-f = fopen("/Users/rishil/Desktop/FYP/EEG-decoding/filtboard.txt");
+f = fopen("C:\Users\RISHI\Desktop\FYP\EEG-decoding\eeg_lib\log\Proper_Gain_255\7hz_2.txt");
 data = textscan(f,'%s');
 fclose(f);
 data = removeDC(str2double(data{1}(2:end-1))');
