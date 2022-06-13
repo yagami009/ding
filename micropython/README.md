@@ -162,15 +162,3 @@ USER_C_MODULES = $(BUILD_DIR)/ulab/code/micropython.cmake
 # This is a simple, convenience wrapper around idf.py (which uses cmake).
 #...
 ```
-
-# Rishil
-
-Key commands:
-connect with local repl: screen /dev/tty.usbserial-0001 115200 
-run board accesses through terminal: ampy --port="/dev/tty.usbserial-0001" rm boot.py
-
-Board now boots with WebREPL:
-TODO:
-Build calibration class for wireless control
-Instantiate runner for calibration called
-Instantiate 
