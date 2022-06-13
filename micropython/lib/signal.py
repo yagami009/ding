@@ -73,7 +73,7 @@ def sos_filter(x, sos_coeffs=None, fs=256):
             sos_coeffs = SOS_SSVEP_BANDPASS_128HZ
         else:
             raise ValueError(
-                "Unepexcted sampling frequency. Only have SOS filter weights for fs = 64Hz or 256Hz"
+                "Unexpected sampling frequency. Only have SOS filter weights for fs = 128Hz or 256Hz"
             )
 
     return spy.signal.sosfilt(sos_coeffs, x)

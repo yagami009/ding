@@ -10,7 +10,7 @@ DEFAULT_SPI_PARAMS = {
     "sck": 18,
     "mosi": 23,
     "miso": 19,
-    "output_amp_gain": 100,  # value between 0-255 controlling gain of output amplifier
+    "output_amp_gain": 255,  # value between 0-255 controlling gain of output amplifier
 }
 
 DEFAULT_ADC_PARAMS = {
@@ -100,16 +100,28 @@ class PeripheralManager:
             print("SPI initialised")
 
         output_gain = max(min(self._spi_params["output_amp_gain"], 255), 0)
-        self.spi_write(output_gain)
+
+        data = bytearray([17, output_gain])
+        #lol
+        cs = Pin(5, Pin.OUT)
+        cs.off() 
+        self._spi.write(data)
+        cs.on() 
+
         if self.verbose:
             print(
                 "DigiPot set to {0} = gain of {1}".format(
-                    output_gain, 1.745 + (255 - output_gain) / (19.2 - 1.745)
+                    output_gain, self.calculate_gain(output_gain)
                 )
             )
 
         gc.collect()
 
+    def calculate_gain(self, output_gain):
+        Rwb = output_gain*10/256 + 0.06
+        Rwa = (256-output_gain)*10/256 + 0.06
+        return (8.2+Rwb)/(1+Rwa) + 1
+        
     @property
     def adc_running(self):
         return (

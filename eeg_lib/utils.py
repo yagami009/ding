@@ -1,3 +1,4 @@
+from copyreg import add_extension
 import numpy as np
 import glob
 import json
@@ -62,7 +63,10 @@ def load_df(fname, key="data", cols=None):
 def standardise(X):
     axis = np.argmax(X.shape)
     return (X - np.mean(X, axis=axis)) / np.std(X, axis=axis)
-
+    # retList = [] 
+    # for i in X:
+    #     retList.append((i - np.mean(i)) / np.std(i))
+    # return np.array(retList)
 
 def standardise_ssvep_tensor(X):
     # Given a obs matrix for given f, and trial, rows (channels) should all be zero mean and unit std dev
