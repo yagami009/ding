@@ -11,8 +11,8 @@ Nt = 3
 stim_freqs = [7, 10, 12]
 decoding_period_s = 4
 
-ssid = 'TP-Link_AP_4C04'
-password = '63525465'
+ssid = ''
+password = ''
 connect_wifi(ssid, password)
 
 

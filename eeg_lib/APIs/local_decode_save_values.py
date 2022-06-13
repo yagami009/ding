@@ -89,8 +89,6 @@ def calibrate():
     gcca.fit(cal_data)
     mset_cca.fit(cal_data)
 
-    # print(data_tensor[0,:,:,0].shape)
-    # print(mset_cca.classify(data_tensor[0,:,:,0]))
     return "calibrated", 200
 
 decoding_data = []

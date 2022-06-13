@@ -44,7 +44,6 @@ cs = machine.Pin(5, machine.Pin.OUT)
 
 # have to pull GPIO 5 LOW before writing the gain
 
-# will change lol
 ssid = ''
 password = ''
 connect_wifi(ssid, password)
